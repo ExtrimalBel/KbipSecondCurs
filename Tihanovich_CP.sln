@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tihanovich_CP", "Tihanovich_CP\Tihanovich_CP.vcxproj", "{A18C65F9-D9CD-45BF-A73F-31FEB938C161}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ClosesClasses", "ClosesClasses\ClosesClasses.vcxproj", "{C3B1F816-26E5-44B9-A0FE-69D319C11FA4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A18C65F9-D9CD-45BF-A73F-31FEB938C161}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A18C65F9-D9CD-45BF-A73F-31FEB938C161}.Debug|Win32.Build.0 = Debug|Win32
+		{A18C65F9-D9CD-45BF-A73F-31FEB938C161}.Release|Win32.ActiveCfg = Release|Win32
+		{A18C65F9-D9CD-45BF-A73F-31FEB938C161}.Release|Win32.Build.0 = Release|Win32
+		{C3B1F816-26E5-44B9-A0FE-69D319C11FA4}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C3B1F816-26E5-44B9-A0FE-69D319C11FA4}.Debug|Win32.Build.0 = Debug|Win32
+		{C3B1F816-26E5-44B9-A0FE-69D319C11FA4}.Release|Win32.ActiveCfg = Release|Win32
+		{C3B1F816-26E5-44B9-A0FE-69D319C11FA4}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
