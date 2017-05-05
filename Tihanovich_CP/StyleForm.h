@@ -33,18 +33,20 @@ namespace Tihanovich_CP {
 
 
 	public:
-		ClosesCollection ^ClosT;
+		ClosesCollection ^LegsCol;
+		ClosesCollection ^TorsCol;
+		ClosesCollection ^ObyvCol;
 		StyleForm(void)
 		{
 			InitializeComponent();
 			//
 			ClosesBox->AllowDrop = true;
 			ModelBox->AllowDrop = true;
-			Clos = gcnew ClosesCollection("./img");
-			ClosT = gcnew ClosesCollection("./img2");
+			LegsCol = gcnew ClosesCollection("./legs");
+			TorsCol = gcnew ClosesCollection("./tors");
+			ObyvCol = gcnew ClosesCollection("./obyv");
 			BoxOfCloses->SelectedIndex = 0;
-			ShowClos(Clos->GetPathOfPicture());
-			NowCloses = gcnew ImageList();
+			ShowClos(LegsCol->GetPathOfPicture());
 			g1 = ModelBox->CreateGraphics();
 			//TODO: добавьте код конструктора
 			//
@@ -65,11 +67,15 @@ namespace Tihanovich_CP {
 		int pbw, pbh;
 		int pbX, pbY;
 		int typec;
-		ImageList ^NowCloses;
-		Image ^Test;
-		Image ^Down;
-		bool IsTestSet = false;
-		bool IsDownSet = false;
+		Image ^Closes;
+		Image ^Tors;
+		Image ^Legs;
+		Image ^Model;
+		Image ^Obyv;
+		bool IsTorsSet = false;
+		bool IsLegsSet = false;
+		bool IsClosesSet = false;
+		bool IsObyvSet = false;
 		Graphics ^ g1;
 	private: System::Windows::Forms::PictureBox^  ModelBox;
 
@@ -159,7 +165,7 @@ namespace Tihanovich_CP {
 			// BoxOfCloses
 			// 
 			this->BoxOfCloses->FormattingEnabled = true;
-			this->BoxOfCloses->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Низ", L"Тест" });
+			this->BoxOfCloses->Items->AddRange(gcnew cli::array< System::Object^  >(4) { L"Ноги", L"Обувь", L"Торс", L"Платья" });
 			this->BoxOfCloses->Location = System::Drawing::Point(169, 481);
 			this->BoxOfCloses->Name = L"BoxOfCloses";
 			this->BoxOfCloses->Size = System::Drawing::Size(121, 21);
@@ -248,13 +254,17 @@ namespace Tihanovich_CP {
 		private: System::Void ShowModel()
 		{
 					 g1->Clear(Color::White);
-					 if (IsDownSet)
+					 if (IsLegsSet)
 					 {
-						 g1->DrawImage(Down, 0, 0);
+						 g1->DrawImage(Legs, 0, 0);
 					 }
-					 if (IsTestSet)
+					 if (IsTorsSet)
 					 {
-						 g1->DrawImage(Test, 0, 0);
+						 g1->DrawImage(Tors, 0, 0);
+					 }
+					 if (IsObyvSet)
+					 {
+						 g1->DrawImage(Obyv, 0, 0);
 					 }
 					
 		}
@@ -263,29 +273,39 @@ private: System::Void button1_Click(System::Object^  sender, System::EventArgs^ 
 }
 private: System::Void PrevClosB_Click(System::Object^  sender, System::EventArgs^  e)
 {
+			 if (typec == 0)
+			 {
+				 LegsCol->PrevPicture();
+				 ShowClos(LegsCol->GetPathOfPicture());
+			 }
 			 if (typec == 1)
 			 {
-				 Clos->PrevPicture();
-				 ShowClos(Clos->GetPathOfPicture());
+				 ObyvCol->PrevPicture();
+				 ShowClos(ObyvCol->GetPathOfPicture());
 			 }
 			 if (typec == 2)
 			 {
-				 ClosT->PrevPicture();
-				 ShowClos(ClosT->GetPathOfPicture());
+				 TorsCol->PrevPicture();
+				 ShowClos(TorsCol->GetPathOfPicture());
 			 }
 
 }
 private: System::Void NextClosB_Click(System::Object^  sender, System::EventArgs^  e)
 {
+			 if (typec == 0)
+			 {
+				 LegsCol->NextPicture();
+				 ShowClos(LegsCol->GetPathOfPicture()); 
+			 }
 			 if (typec == 1)
 			 {
-				 Clos->NextPicture();
-				 ShowClos(Clos->GetPathOfPicture()); 
+				 ObyvCol->NextPicture();
+				 ShowClos(ObyvCol->GetPathOfPicture());
 			 }
 			 if (typec == 2)
 			 {
-				 ClosT->NextPicture();
-				 ShowClos(ClosT->GetPathOfPicture());
+				 TorsCol->NextPicture();
+				 ShowClos(TorsCol->GetPathOfPicture());
 			 }
 		
 }
@@ -316,15 +336,25 @@ private: System::Void ModelBox_DragEnter(System::Object^  sender, System::Window
 }
 private: System::Void ModelBox_DragDrop(System::Object^  sender, System::Windows::Forms::DragEventArgs^  e)
 {
+			 if (typec == 0)
+			 {
+				 IsLegsSet = true;
+				 Legs = safe_cast<Bitmap^>(e->Data->GetData(DataFormats::Bitmap));
+			 }
 			 if (typec == 1)
 			 {
-				 IsDownSet = true;
-				 Down = safe_cast<Bitmap^>(e->Data->GetData(DataFormats::Bitmap));
+				 IsObyvSet = true;
+				 Obyv = safe_cast<Bitmap^>(e->Data->GetData(DataFormats::Bitmap));
 			 }
 			 if (typec == 2)
 			 {
-				 IsTestSet = true;
-				 Test = safe_cast<Bitmap^>(e->Data->GetData(DataFormats::Bitmap));
+				 IsTorsSet = true;
+				 Tors = safe_cast<Bitmap^>(e->Data->GetData(DataFormats::Bitmap));
+			 }
+			 if (typec == 3)
+			 {
+				 IsClosesSet = true;
+				 Closes = safe_cast<Bitmap^>(e->Data->GetData(DataFormats::Bitmap));
 			 }
 			 ShowModel();
 			
@@ -343,28 +373,34 @@ private: System::Void ClosesBox_DragEnter(System::Object^  sender, System::Windo
 }
 private: System::Void comboBox1_TextUpdate(System::Object^  sender, System::EventArgs^  e)
 {
-			 if (BoxOfCloses->SelectedIndex == 0)
-				 typec = 1;
-			 else
-				 typec = 2;
+
 }
 private: System::Void comboBox1_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e)
 {
-			 if (BoxOfCloses->SelectedIndex == 0)
+			 switch (BoxOfCloses->SelectedIndex)
 			 {
+			 case 0:
+				 typec = 0;
+				 ShowClos(LegsCol->GetPathOfPicture());
+				 break;
+			 case 1:
+				 ShowClos(ObyvCol->GetPathOfPicture());
 				 typec = 1;
-				 ShowClos(Clos->GetPathOfPicture());
-			 }
-			 else
-			 {
+				 break;
+			 case 2:
+				 ShowClos(TorsCol->GetPathOfPicture());
 				 typec = 2;
-				 ShowClos(ClosT->GetPathOfPicture());
+				 break;
+			 case 3:
+				 typec = 3;
 			 }
 }
 private: System::Void button1_Click_1(System::Object^  sender, System::EventArgs^  e)
 {
-			 IsDownSet = false;
-			 IsTestSet = false;
+			 IsTorsSet = false;
+			 IsLegsSet = false;
+			 IsClosesSet = false;
+			 IsObyvSet = false;
 			 ShowModel();
 }
 };
