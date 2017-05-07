@@ -36,6 +36,8 @@ namespace Tihanovich_CP {
 		ClosesCollection ^LegsCol;
 		ClosesCollection ^TorsCol;
 		ClosesCollection ^ObyvCol;
+		ClosesCollection ^ClosesCol;
+		ClosesCollection ^ModelCol;
 		StyleForm(void)
 		{
 			InitializeComponent();
@@ -45,6 +47,8 @@ namespace Tihanovich_CP {
 			LegsCol = gcnew ClosesCollection("./legs");
 			TorsCol = gcnew ClosesCollection("./tors");
 			ObyvCol = gcnew ClosesCollection("./obyv");
+			ClosesCol = gcnew ClosesCollection("./closes");
+			ModelCol = gcnew ClosesCollection("./models");
 			BoxOfCloses->SelectedIndex = 0;
 			ShowClos(LegsCol->GetPathOfPicture());
 			g1 = ModelBox->CreateGraphics();
@@ -181,6 +185,7 @@ namespace Tihanovich_CP {
 			this->PrevModel->TabIndex = 5;
 			this->PrevModel->Text = L"Предыдущая";
 			this->PrevModel->UseVisualStyleBackColor = true;
+			this->PrevModel->Click += gcnew System::EventHandler(this, &StyleForm::PrevModel_Click);
 			// 
 			// NextModel
 			// 
@@ -190,6 +195,7 @@ namespace Tihanovich_CP {
 			this->NextModel->TabIndex = 6;
 			this->NextModel->Text = L"Следующая";
 			this->NextModel->UseVisualStyleBackColor = true;
+			this->NextModel->Click += gcnew System::EventHandler(this, &StyleForm::NextModel_Click);
 			// 
 			// NameModel
 			// 
@@ -254,6 +260,7 @@ namespace Tihanovich_CP {
 		private: System::Void ShowModel()
 		{
 					 g1->Clear(Color::White);
+					 g1->DrawImage(Model, 0, 0);
 					 if (IsLegsSet)
 					 {
 						 g1->DrawImage(Legs, 0, 0);
@@ -265,6 +272,12 @@ namespace Tihanovich_CP {
 					 if (IsObyvSet)
 					 {
 						 g1->DrawImage(Obyv, 0, 0);
+					 }
+					 if (IsClosesSet)
+					 {
+						 IsTorsSet = false;
+						 IsLegsSet = false;
+						 g1->DrawImage(Closes, 0, 0);
 					 }
 					
 		}
@@ -288,6 +301,11 @@ private: System::Void PrevClosB_Click(System::Object^  sender, System::EventArgs
 				 TorsCol->PrevPicture();
 				 ShowClos(TorsCol->GetPathOfPicture());
 			 }
+			 if (typec == 3)
+			 {
+				 ClosesCol->PrevPicture();
+				 ShowClos(ClosesCol->GetPathOfPicture());
+			 }
 
 }
 private: System::Void NextClosB_Click(System::Object^  sender, System::EventArgs^  e)
@@ -306,6 +324,11 @@ private: System::Void NextClosB_Click(System::Object^  sender, System::EventArgs
 			 {
 				 TorsCol->NextPicture();
 				 ShowClos(TorsCol->GetPathOfPicture());
+			 }
+			 if (typec == 3)
+			 {
+				 ClosesCol->NextPicture();
+				 ShowClos(ClosesCol->GetPathOfPicture());
 			 }
 		
 }
@@ -339,6 +362,7 @@ private: System::Void ModelBox_DragDrop(System::Object^  sender, System::Windows
 			 if (typec == 0)
 			 {
 				 IsLegsSet = true;
+				 IsClosesSet = false;
 				 Legs = safe_cast<Bitmap^>(e->Data->GetData(DataFormats::Bitmap));
 			 }
 			 if (typec == 1)
@@ -349,11 +373,14 @@ private: System::Void ModelBox_DragDrop(System::Object^  sender, System::Windows
 			 if (typec == 2)
 			 {
 				 IsTorsSet = true;
+				 IsClosesSet = false;
 				 Tors = safe_cast<Bitmap^>(e->Data->GetData(DataFormats::Bitmap));
 			 }
 			 if (typec == 3)
 			 {
 				 IsClosesSet = true;
+				 IsTorsSet = false;
+				 IsLegsSet = false;
 				 Closes = safe_cast<Bitmap^>(e->Data->GetData(DataFormats::Bitmap));
 			 }
 			 ShowModel();
@@ -393,6 +420,7 @@ private: System::Void comboBox1_SelectedIndexChanged(System::Object^  sender, Sy
 				 break;
 			 case 3:
 				 typec = 3;
+				 ShowClos(ClosesCol->GetPathOfPicture());
 			 }
 }
 private: System::Void button1_Click_1(System::Object^  sender, System::EventArgs^  e)
@@ -401,6 +429,18 @@ private: System::Void button1_Click_1(System::Object^  sender, System::EventArgs
 			 IsLegsSet = false;
 			 IsClosesSet = false;
 			 IsObyvSet = false;
+			 ShowModel();
+}
+private: System::Void PrevModel_Click(System::Object^  sender, System::EventArgs^  e)
+{
+			 ModelCol->PrevPicture();
+			 Model = Image::FromFile(ModelCol->GetPathOfPicture());
+			 ShowModel();
+}
+private: System::Void NextModel_Click(System::Object^  sender, System::EventArgs^  e)
+{
+			 ModelCol->NextPicture();
+			 Model = Image::FromFile(ModelCol->GetPathOfPicture());
 			 ShowModel();
 }
 };
