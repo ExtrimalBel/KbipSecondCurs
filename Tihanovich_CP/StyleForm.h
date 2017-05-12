@@ -31,12 +31,31 @@ namespace Tihanovich_CP {
 	public:
 
 
-
+		private:
+			int pbw, pbh;
+			int pbX, pbY;
+			int typec;
+			Image ^Closes;
+			Image ^Tors;
+			Image ^Legs;
+			Image ^Model;
+			Image ^Obyv;
+			bool IsTorsSet = false;
+			bool IsLegsSet = false;
+			bool IsClosesSet = false;
+			bool IsObyvSet = false;
+			bool lcheck = false;
+			Graphics ^ g1;
 	public:
 		ClosesCollection ^LegsCol;
 		ClosesCollection ^TorsCol;
 		ClosesCollection ^ObyvCol;
 		ClosesCollection ^ClosesCol;
+
+	private: System::Windows::Forms::CheckBox^  LegsCheck;
+
+	private: System::Windows::Forms::Timer^  timer1;
+	public:
 		ClosesCollection ^ModelCol;
 		StyleForm(void)
 		{
@@ -49,9 +68,18 @@ namespace Tihanovich_CP {
 			ObyvCol = gcnew ClosesCollection("./obyv");
 			ClosesCol = gcnew ClosesCollection("./closes");
 			ModelCol = gcnew ClosesCollection("./models");
+			ModelBox->Visible = true;
+			g1 = ModelBox->CreateGraphics();
 			BoxOfCloses->SelectedIndex = 0;
 			ShowClos(LegsCol->GetPathOfPicture());
-			g1 = ModelBox->CreateGraphics();
+			//ShowModel(ModelCol->GetPathOfPicture());
+			Model = Image::FromFile(ModelCol->GetPathOfPicture());
+			g1->Clear(Color::Red);
+			g1->DrawImage(Model, 0, 0, 220, 300);
+			int i;
+			ModelBox->BackColor = Color::Transparent;
+			ShowModel();
+			timer1->Enabled = true;
 			//TODO: добавьте код конструктора
 			//
 		}
@@ -68,24 +96,13 @@ namespace Tihanovich_CP {
 			}
 		}
 	private:
-		int pbw, pbh;
-		int pbX, pbY;
-		int typec;
-		Image ^Closes;
-		Image ^Tors;
-		Image ^Legs;
-		Image ^Model;
-		Image ^Obyv;
-		bool IsTorsSet = false;
-		bool IsLegsSet = false;
-		bool IsClosesSet = false;
-		bool IsObyvSet = false;
-		Graphics ^ g1;
+		
 	private: System::Windows::Forms::PictureBox^  ModelBox;
 
 	private: System::Windows::Forms::PictureBox^  ClosesBox;
 	private: System::Windows::Forms::Button^  PrevClosB;
 	private: System::Windows::Forms::Button^  NextClosB;
+	private: System::ComponentModel::IContainer^  components;
 	protected:
 
 
@@ -99,7 +116,7 @@ namespace Tihanovich_CP {
 			 /// <summary>
 		/// Требуется переменная конструктора.
 		/// </summary>
-		System::ComponentModel::Container ^components;
+
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -108,6 +125,7 @@ namespace Tihanovich_CP {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			this->components = (gcnew System::ComponentModel::Container());
 			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(StyleForm::typeid));
 			this->ModelBox = (gcnew System::Windows::Forms::PictureBox());
 			this->ClosesBox = (gcnew System::Windows::Forms::PictureBox());
@@ -119,13 +137,15 @@ namespace Tihanovich_CP {
 			this->NameModel = (gcnew System::Windows::Forms::Label());
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->button1 = (gcnew System::Windows::Forms::Button());
+			this->LegsCheck = (gcnew System::Windows::Forms::CheckBox());
+			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->ModelBox))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->ClosesBox))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// ModelBox
 			// 
-			this->ModelBox->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"ModelBox.BackgroundImage")));
+			this->ModelBox->BackColor = System::Drawing::Color::Red;
 			this->ModelBox->Location = System::Drawing::Point(648, 87);
 			this->ModelBox->Name = L"ModelBox";
 			this->ModelBox->Size = System::Drawing::Size(220, 300);
@@ -136,6 +156,7 @@ namespace Tihanovich_CP {
 			// 
 			// ClosesBox
 			// 
+			this->ClosesBox->BackColor = System::Drawing::Color::Red;
 			this->ClosesBox->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"ClosesBox.BackgroundImage")));
 			this->ClosesBox->Location = System::Drawing::Point(70, 87);
 			this->ClosesBox->Name = L"ClosesBox";
@@ -189,6 +210,7 @@ namespace Tihanovich_CP {
 			// 
 			// NextModel
 			// 
+			this->NextModel->BackgroundImageLayout = System::Windows::Forms::ImageLayout::None;
 			this->NextModel->Location = System::Drawing::Point(784, 437);
 			this->NextModel->Name = L"NextModel";
 			this->NextModel->Size = System::Drawing::Size(84, 23);
@@ -217,13 +239,29 @@ namespace Tihanovich_CP {
 			// 
 			// button1
 			// 
-			this->button1->Location = System::Drawing::Point(648, 45);
+			this->button1->Location = System::Drawing::Point(648, 48);
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(75, 23);
 			this->button1->TabIndex = 9;
 			this->button1->Text = L"Очистить";
 			this->button1->UseVisualStyleBackColor = true;
 			this->button1->Click += gcnew System::EventHandler(this, &StyleForm::button1_Click_1);
+			// 
+			// LegsCheck
+			// 
+			this->LegsCheck->AutoSize = true;
+			this->LegsCheck->Location = System::Drawing::Point(648, 398);
+			this->LegsCheck->Name = L"LegsCheck";
+			this->LegsCheck->Size = System::Drawing::Size(203, 17);
+			this->LegsCheck->TabIndex = 11;
+			this->LegsCheck->Text = L"Обувь сверху(например для сапог)";
+			this->LegsCheck->UseVisualStyleBackColor = true;
+			this->LegsCheck->CheckedChanged += gcnew System::EventHandler(this, &StyleForm::LegsCheck_CheckedChanged);
+			// 
+			// timer1
+			// 
+			this->timer1->Interval = 500;
+			this->timer1->Tick += gcnew System::EventHandler(this, &StyleForm::timer1_Tick);
 			// 
 			// StyleForm
 			// 
@@ -232,6 +270,7 @@ namespace Tihanovich_CP {
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
 			this->ClientSize = System::Drawing::Size(984, 531);
+			this->Controls->Add(this->LegsCheck);
 			this->Controls->Add(this->button1);
 			this->Controls->Add(this->label1);
 			this->Controls->Add(this->NameModel);
@@ -257,27 +296,56 @@ namespace Tihanovich_CP {
 					ClosesBox->SizeMode = PictureBoxSizeMode::AutoSize;
 					ClosesBox->Image = gcnew Bitmap(PPath);
 		}
+		private:System::Void ShowModel(String ^PPath)
+		{
+					//ModelBox->SizeMode = PictureBoxSizeMode::AutoSize;
+				
+					Model = Image::FromFile(PPath);
+					//g1->Clear(Color::White);
+					//g1->DrawImage(Model, 0, 0);
+					ModelBox->Image = Model;
+					//Model = Image::FromFile(PPath);
+					//ModelBox->Image = Model;
+		}
 		private: System::Void ShowModel()
 		{
-					 g1->Clear(Color::White);
-					 g1->DrawImage(Model, 0, 0);
-					 if (IsLegsSet)
+					 ModelBox->Height = 300;
+					 ModelBox->Width = 220;
+					 ModelBox->SizeMode = PictureBoxSizeMode::Zoom;
+					 g1->Clear(Color::Red);
+					 g1->DrawImage(Model, 0, 0, 220, 300);
+					 if (lcheck)
 					 {
-						 g1->DrawImage(Legs, 0, 0);
+						 if (IsLegsSet)
+						 {
+							 g1->DrawImage(Legs, 0, 0, 220, 300);
+						 }
+						 if (IsObyvSet)
+						 {
+							 g1->DrawImage(Obyv, 0, 0, 220, 300);
+						 }
+					 }
+					 else
+					 {
+						 if (IsObyvSet)
+						 {
+							 g1->DrawImage(Obyv, 0, 0, 220, 300);
+						 }
+						 if (IsLegsSet)
+						 {
+							 g1->DrawImage(Legs, 0, 0, 220, 300);
+						 }
 					 }
 					 if (IsTorsSet)
 					 {
-						 g1->DrawImage(Tors, 0, 0);
+						 g1->DrawImage(Tors, 0, 0,220,300);
 					 }
-					 if (IsObyvSet)
-					 {
-						 g1->DrawImage(Obyv, 0, 0);
-					 }
+					 
 					 if (IsClosesSet)
 					 {
 						 IsTorsSet = false;
 						 IsLegsSet = false;
-						 g1->DrawImage(Closes, 0, 0);
+						 g1->DrawImage(Closes, 0, 0,220,300);
 					 }
 					
 		}
@@ -441,6 +509,19 @@ private: System::Void NextModel_Click(System::Object^  sender, System::EventArgs
 {
 			 ModelCol->NextPicture();
 			 Model = Image::FromFile(ModelCol->GetPathOfPicture());
+			 ShowModel();
+}
+private: System::Void LegsCheck_CheckedChanged(System::Object^  sender, System::EventArgs^  e)
+{
+			 if (LegsCheck->Checked == true)
+				 lcheck = true;
+			 else
+				 lcheck = false;
+			 ShowModel();
+}
+private: System::Void timer1_Tick(System::Object^  sender, System::EventArgs^  e)
+{
+			 timer1->Enabled = false;
 			 ShowModel();
 }
 };
