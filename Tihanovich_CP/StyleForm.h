@@ -20,6 +20,7 @@ namespace Tihanovich_CP {
 	public ref class StyleForm : public System::Windows::Forms::Form
 	{
 	public:
+		// Объект который работает с картинками модели
 		ClosesCollection ^ Clos;
 	private: System::Windows::Forms::ComboBox^  BoxOfCloses;
 	private: System::Windows::Forms::Button^  PrevModel;
@@ -32,21 +33,24 @@ namespace Tihanovich_CP {
 
 
 		private:
-			int pbw, pbh;
-			int pbX, pbY;
-			int typec;
+
+			int typec; // Тип выбранного инструмента-одежды
+			//Картинки в которых находится выбранная одежда
 			Image ^Closes;
 			Image ^Tors;
 			Image ^Legs;
 			Image ^Model;
 			Image ^Obyv;
+			// Булевые переменный, которые указывают какая одежда надета
 			bool IsTorsSet = false;
 			bool IsLegsSet = false;
 			bool IsClosesSet = false;
 			bool IsObyvSet = false;
 			bool lcheck = false;
+			// Объект нужный для отрисовки модели
 			Graphics ^ g1;
 	public:
+		// Объекты, требующиеся для работами с файлами одежды
 		ClosesCollection ^LegsCol;
 		ClosesCollection ^TorsCol;
 		ClosesCollection ^ObyvCol;
@@ -63,23 +67,24 @@ namespace Tihanovich_CP {
 			//
 			ClosesBox->AllowDrop = true;
 			ModelBox->AllowDrop = true;
+			// Создаем объекты для работы с картинками
 			LegsCol = gcnew ClosesCollection("./legs");
 			TorsCol = gcnew ClosesCollection("./tors");
 			ObyvCol = gcnew ClosesCollection("./obyv");
 			ClosesCol = gcnew ClosesCollection("./closes");
 			ModelCol = gcnew ClosesCollection("./models");
 			ModelBox->Visible = true;
-			g1 = ModelBox->CreateGraphics();
-			BoxOfCloses->SelectedIndex = 0;
-			ShowClos(LegsCol->GetPathOfPicture());
+			g1 = ModelBox->CreateGraphics(); // Создаем объект Graphics который будет рисовать в ModelBox
+			BoxOfCloses->SelectedIndex = 0; // В списке типов одежды переключаемся на первый элемент
+			ShowClos(LegsCol->GetPathOfPicture()); // Получаем путь к первому файлу из LegsCol
 			//ShowModel(ModelCol->GetPathOfPicture());
-			Model = Image::FromFile(ModelCol->GetPathOfPicture());
-			g1->Clear(Color::Red);
-			g1->DrawImage(Model, 0, 0, 220, 300);
+			Model = Image::FromFile(ModelCol->GetPathOfPicture()); // Загружаем первую модель в Model
+			g1->Clear(Color::Red); // Очищаем g1 красным цветом
+			g1->DrawImage(Model, 0, 0, 220, 300); // Рисуем модель
 			int i;
-			ModelBox->BackColor = Color::Transparent;
-			ShowModel();
-			timer1->Enabled = true;
+			//ModelBox->BackColor = Color::Transparent;
+			ShowModel(); // Вызываем метод показа модели
+			timer1->Enabled = true; // Запускаем таймер, который нужен для корректного отображения модели в первый раз
 			//TODO: добавьте код конструктора
 			//
 		}
@@ -291,23 +296,12 @@ namespace Tihanovich_CP {
 		}
 #pragma endregion
 
-		private:System::Void ShowClos(String ^PPath)
+		private:System::Void ShowClos(String ^PPath) // Метод показывающий текущий элемент одежды в ClosesBox
 		{
 					ClosesBox->SizeMode = PictureBoxSizeMode::AutoSize;
 					ClosesBox->Image = gcnew Bitmap(PPath);
 		}
-		private:System::Void ShowModel(String ^PPath)
-		{
-					//ModelBox->SizeMode = PictureBoxSizeMode::AutoSize;
-				
-					Model = Image::FromFile(PPath);
-					//g1->Clear(Color::White);
-					//g1->DrawImage(Model, 0, 0);
-					ModelBox->Image = Model;
-					//Model = Image::FromFile(PPath);
-					//ModelBox->Image = Model;
-		}
-		private: System::Void ShowModel()
+		private: System::Void ShowModel() // Метод показывающий модель и одежду в ModelBox
 		{
 					 ModelBox->Height = 300;
 					 ModelBox->Width = 220;
@@ -352,7 +346,7 @@ namespace Tihanovich_CP {
 private: System::Void button1_Click(System::Object^  sender, System::EventArgs^  e)
 {
 }
-private: System::Void PrevClosB_Click(System::Object^  sender, System::EventArgs^  e)
+private: System::Void PrevClosB_Click(System::Object^  sender, System::EventArgs^  e) // Переключаем на предыдущий элемент одежды
 {
 			 if (typec == 0)
 			 {
@@ -376,7 +370,7 @@ private: System::Void PrevClosB_Click(System::Object^  sender, System::EventArgs
 			 }
 
 }
-private: System::Void NextClosB_Click(System::Object^  sender, System::EventArgs^  e)
+private: System::Void NextClosB_Click(System::Object^  sender, System::EventArgs^  e) // На следующий
 {
 			 if (typec == 0)
 			 {
@@ -408,13 +402,13 @@ private: System::Void StyleForm_DragDrop(System::Object^  sender, System::Window
 {
 
 }
-private: System::Void ClosesBox_MouseDown(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e)
+private: System::Void ClosesBox_MouseDown(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) // Начало DragonDrop-а
 {
 			 PictureBox ^ pb = ClosesBox;
 			 pb->Select();
-			 pb->DoDragDrop(ClosesBox->Image, DragDropEffects::Copy);
+			 pb->DoDragDrop(ClosesBox->Image, DragDropEffects::Copy);  // Начинаем перемещение
 }
-private: System::Void ModelBox_DragEnter(System::Object^  sender, System::Windows::Forms::DragEventArgs^  e)
+private: System::Void ModelBox_DragEnter(System::Object^  sender, System::Windows::Forms::DragEventArgs^  e) // Задаем эффект
 {
 			 if (e->Data->GetDataPresent(DataFormats::Bitmap))
 			 {
@@ -425,7 +419,7 @@ private: System::Void ModelBox_DragEnter(System::Object^  sender, System::Window
 				 e->Effect = DragDropEffects::None;
 			 }
 }
-private: System::Void ModelBox_DragDrop(System::Object^  sender, System::Windows::Forms::DragEventArgs^  e)
+private: System::Void ModelBox_DragDrop(System::Object^  sender, System::Windows::Forms::DragEventArgs^  e) // При опускании на ModelBox заносим перемещаемую картинку в соответствующую переменную
 {
 			 if (typec == 0)
 			 {
@@ -470,7 +464,7 @@ private: System::Void comboBox1_TextUpdate(System::Object^  sender, System::Even
 {
 
 }
-private: System::Void comboBox1_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e)
+private: System::Void comboBox1_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e) // Если выбрали другой тип одежды то загрузим нужную картинку в ClosesBox
 {
 			 switch (BoxOfCloses->SelectedIndex)
 			 {
@@ -491,7 +485,7 @@ private: System::Void comboBox1_SelectedIndexChanged(System::Object^  sender, Sy
 				 ShowClos(ClosesCol->GetPathOfPicture());
 			 }
 }
-private: System::Void button1_Click_1(System::Object^  sender, System::EventArgs^  e)
+private: System::Void button1_Click_1(System::Object^  sender, System::EventArgs^  e) // Событие убирающее одежду с модели
 {
 			 IsTorsSet = false;
 			 IsLegsSet = false;
@@ -499,19 +493,19 @@ private: System::Void button1_Click_1(System::Object^  sender, System::EventArgs
 			 IsObyvSet = false;
 			 ShowModel();
 }
-private: System::Void PrevModel_Click(System::Object^  sender, System::EventArgs^  e)
+private: System::Void PrevModel_Click(System::Object^  sender, System::EventArgs^  e) // Выбираем и отрисовываем предыдущую модель
 {
 			 ModelCol->PrevPicture();
 			 Model = Image::FromFile(ModelCol->GetPathOfPicture());
 			 ShowModel();
 }
-private: System::Void NextModel_Click(System::Object^  sender, System::EventArgs^  e)
+private: System::Void NextModel_Click(System::Object^  sender, System::EventArgs^  e) // Выбираем и отрисовываем следующую модель
 {
 			 ModelCol->NextPicture();
 			 Model = Image::FromFile(ModelCol->GetPathOfPicture());
 			 ShowModel();
 }
-private: System::Void LegsCheck_CheckedChanged(System::Object^  sender, System::EventArgs^  e)
+private: System::Void LegsCheck_CheckedChanged(System::Object^  sender, System::EventArgs^  e) // При установки галочки обувь будет рисоваться поверх штанов
 {
 			 if (LegsCheck->Checked == true)
 				 lcheck = true;
@@ -519,7 +513,7 @@ private: System::Void LegsCheck_CheckedChanged(System::Object^  sender, System::
 				 lcheck = false;
 			 ShowModel();
 }
-private: System::Void timer1_Tick(System::Object^  sender, System::EventArgs^  e)
+private: System::Void timer1_Tick(System::Object^  sender, System::EventArgs^  e) // Событие требуеться для первоначальной отрисовки модели, после этого данный таймер не используется
 {
 			 timer1->Enabled = false;
 			 ShowModel();
