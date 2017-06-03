@@ -13,6 +13,7 @@ public:
 	int CountImg;
 	ClosesCollection(String ^Path)
 	{
+		//dwdw
 		di = gcnew DirectoryInfo(Path); // Создаем объект DirectoryInfo 
 		aPath = di->FullName;
 		fi = di->GetFiles(); // Заполняем fi информацией о всех пнгшках в папке
