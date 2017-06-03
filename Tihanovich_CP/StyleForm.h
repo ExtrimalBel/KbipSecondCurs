@@ -59,6 +59,8 @@ namespace Tihanovich_CP {
 	private: System::Windows::Forms::CheckBox^  LegsCheck;
 
 	private: System::Windows::Forms::Timer^  timer1;
+	private: System::Windows::Forms::HelpProvider^  helpProvider1;
+	private: System::Windows::Forms::Button^  helpB;
 	public:
 		ClosesCollection ^ModelCol;
 		StyleForm(void)
@@ -87,6 +89,7 @@ namespace Tihanovich_CP {
 			timer1->Enabled = true; // Запускаем таймер, который нужен для корректного отображения модели в первый раз
 			//TODO: добавьте код конструктора
 			//
+			this->helpProvider1->HelpNamespace = "help.chm";
 		}
 
 	protected:
@@ -144,6 +147,8 @@ namespace Tihanovich_CP {
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->LegsCheck = (gcnew System::Windows::Forms::CheckBox());
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
+			this->helpProvider1 = (gcnew System::Windows::Forms::HelpProvider());
+			this->helpB = (gcnew System::Windows::Forms::Button());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->ModelBox))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->ClosesBox))->BeginInit();
 			this->SuspendLayout();
@@ -268,6 +273,20 @@ namespace Tihanovich_CP {
 			this->timer1->Interval = 500;
 			this->timer1->Tick += gcnew System::EventHandler(this, &StyleForm::timer1_Tick);
 			// 
+			// helpProvider1
+			// 
+			this->helpProvider1->HelpNamespace = L"./help.chm";
+			// 
+			// helpB
+			// 
+			this->helpB->Location = System::Drawing::Point(13, 13);
+			this->helpB->Name = L"helpB";
+			this->helpB->Size = System::Drawing::Size(75, 23);
+			this->helpB->TabIndex = 12;
+			this->helpB->Text = L"Справка";
+			this->helpB->UseVisualStyleBackColor = true;
+			this->helpB->Click += gcnew System::EventHandler(this, &StyleForm::helpB_Click);
+			// 
 			// StyleForm
 			// 
 			this->AllowDrop = true;
@@ -275,6 +294,7 @@ namespace Tihanovich_CP {
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
 			this->ClientSize = System::Drawing::Size(984, 531);
+			this->Controls->Add(this->helpB);
 			this->Controls->Add(this->LegsCheck);
 			this->Controls->Add(this->button1);
 			this->Controls->Add(this->label1);
@@ -286,8 +306,10 @@ namespace Tihanovich_CP {
 			this->Controls->Add(this->PrevClosB);
 			this->Controls->Add(this->ClosesBox);
 			this->Controls->Add(this->ModelBox);
+			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->Name = L"StyleForm";
-			this->Text = L"StyleForm";
+			this->helpProvider1->SetShowHelp(this, true);
+			this->Text = L"Создание стиля";
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->ModelBox))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->ClosesBox))->EndInit();
 			this->ResumeLayout(false);
@@ -517,6 +539,10 @@ private: System::Void timer1_Tick(System::Object^  sender, System::EventArgs^  e
 {
 			 timer1->Enabled = false;
 			 ShowModel();
+}
+private: System::Void helpB_Click(System::Object^  sender, System::EventArgs^  e)
+{
+			 Help::ShowHelp(this, helpProvider1->HelpNamespace);
 }
 };
 }

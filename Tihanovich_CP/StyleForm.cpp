@@ -1,4 +1,4 @@
-#include "Stdafx.h"
+//#include "Stdafx.h"
 #include "StyleForm.h"
 using namespace System;
 using namespace System::Windows::Forms;

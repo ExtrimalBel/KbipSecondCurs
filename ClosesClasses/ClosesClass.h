@@ -13,7 +13,7 @@ public:
 	int CountImg;
 	ClosesCollection(String ^Path)
 	{
-		di = gcnew DirectoryInfo(Path + "/*.png"); // Создаем объект DirectoryInfo 
+		di = gcnew DirectoryInfo(Path); // Создаем объект DirectoryInfo 
 		aPath = di->FullName;
 		fi = di->GetFiles(); // Заполняем fi информацией о всех пнгшках в папке
 		imgList = gcnew System::Collections::Generic::List<String^>; // Создаём List картинок
